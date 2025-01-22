@@ -45,6 +45,6 @@ http.createServer(function (req, res) {
         res.writeHead(404, {'Content-Type': 'text/plain'});
         res.end('404 Not Found');
     }
-}).listen(8081, function() {
-    console.log('Server running at http://localhost:8080/');
+}).listen(3000, function() {
+    console.log('Server running at http://localhost:3000/');
 });

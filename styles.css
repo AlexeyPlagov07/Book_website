@@ -1,4 +1,4 @@
-/* General Reset */
+/* General Reset */ 
 * {
     margin: 0;
     padding: 0;
@@ -10,6 +10,10 @@ body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
     color: #333;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
 }
 
 /* Navbar Styles */
@@ -58,28 +62,54 @@ body {
     font-size: 18px;
 }
 
-/* Scrollable Book Covers Section */
+/* Book Covers Section */
 .book-covers-container {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 items per row */
+    grid-template-columns: repeat(4, 1fr); /* 4 items per row */
     gap: 20px; /* space between items */
     padding: 20px;
-    overflow-x: auto; /* Enables horizontal scrolling */
-    white-space: nowrap; /* Prevents wrapping of items */
+    flex-grow: 1; /* Make sure book covers take the most available space */
 }
 
-.book-cover {
+/* Book Selector Layout */
+.book-selector {
     background-color: #add1ed;
-    height: 200px;
+    height: 500px;
     text-align: center;
     padding: 10px;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: flex-start; /* Aligns content to the top */
     align-items: center;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     font-size: 16px;
     font-weight: bold;
+    color: #333;
+}
+
+/* Book Cover Styling */
+.book-selector img {
+    width: 250px; /* Width of the book cover */
+    height: 330px; /* Height of the book cover */
+    object-fit: cover; /* Ensures the image covers the area without stretching */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Box shadow for depth */
+    margin-top: 10px; /* Reduced margin to bring the cover closer to the title */
+    margin-bottom: 10px; /* Space between image and author text */
+}
+
+/* Book Name Styling */
+.book-name {
+    margin-bottom: 0px; /* Adjust space between title and cover */
+    font-size: 18px;
+    font-weight: normal;
+    color: #333;
+}
+
+.book-author {
+    font-size: 18px;
+    font-weight: normal;
     color: #333;
 }
 
