@@ -1,6 +1,24 @@
 var http = require('http');
 var fs = require('fs');
 var path = require('path');
+var mysql = require('mysql');
+
+// Create MySQL connection
+var db = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: 'Ap45755!',
+    database: 'test_database' // Make sure this is your actual database name
+});
+
+// Connect to the database
+db.connect(function (err) {
+    if (err) {
+        console.error('Error connecting to the database: ' + err.stack);
+        return;
+    }
+    console.log('Connected to MySQL database');
+});
 
 // Create the server
 http.createServer(function (req, res) {
@@ -40,11 +58,25 @@ http.createServer(function (req, res) {
             }
         });
     }
+    // API endpoint to fetch data from MySQL
+    else if (req.url === '/data') {
+        var sql = 'SELECT name, author, img_url FROM books'; // Fetch name and author from books table
+        db.query(sql, function (err, results) {
+            if (err) {
+                res.writeHead(500, {'Content-Type': 'text/plain'});
+                res.end('Error fetching data from the database');
+                return;
+            }
+            // Send the fetched data as JSON
+            res.writeHead(200, {'Content-Type': 'application/json'});
+            res.end(JSON.stringify(results));
+        });
+    }
     // Handle 404 for other routes
     else {
         res.writeHead(404, {'Content-Type': 'text/plain'});
         res.end('404 Not Found');
     }
-}).listen(3000, function() {
+}).listen(3000, function () {
     console.log('Server running at http://localhost:3000/');
 });

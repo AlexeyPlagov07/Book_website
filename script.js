@@ -5,7 +5,7 @@ const servicesBtn = document.getElementById("servicesBtn");
 const contactBtn = document.getElementById("contactBtn");
 
 // Select all book covers
-const bookCovers = document.querySelectorAll('.book-cover');
+const bookCovers = document.querySelectorAll('.book-selector');
 
 // Add click event listeners to each navbar button
 homeBtn.addEventListener("click", function() {
