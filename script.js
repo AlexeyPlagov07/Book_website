@@ -27,6 +27,8 @@ contactBtn.addEventListener("click", function() {
 // Add click event listeners to each book cover
 bookCovers.forEach(function(bookCover, index) {
     bookCover.addEventListener("click", function() {
-        alert("You clicked on Book " + (index + 1) + "!");
+        console.log("Book " + (index + 1) + " clicked! Redirecting to /info...");
+        alert(index)
+        window.location.href = "/info";
     });
 });

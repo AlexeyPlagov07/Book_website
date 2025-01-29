@@ -26,56 +26,56 @@
   <script>
     // Fetch the data from the /data endpoint
     fetch('/data')
-  .then(response => response.json())  // Parse the JSON response
-  .then(data => {
-    const booksContainer = document.getElementById('books-container');
+    .then(response => response.json())
+    .then(data => {
+      const booksContainer = document.getElementById('books-container');
     
-    // If no data is returned
-    if (data.length === 0) {
-      const noBooksMessage = document.createElement('p');
-      noBooksMessage.textContent = 'No books found in the database.';
-      booksContainer.appendChild(noBooksMessage);
-      return;
-    }
+      // If no data is returned
+      if (data.length === 0) {
+        const noBooksMessage = document.createElement('p');
+        noBooksMessage.textContent = 'No books found in the database.';
+        booksContainer.appendChild(noBooksMessage);
+        return;
+      }
 
-    // Loop through the data and display the book covers with name and author
-    data.forEach((item, index) => {
-      const bookSelector = document.createElement('div');
-      bookSelector.classList.add('book-selector');
-      
-      // Book cover image (using the img_url from the database)
-      const img = document.createElement('img');
-      img.src = item.img_url;  // This assumes img_url is either a relative or absolute URL
-      console.log("Image URL:", item.img_url); // Check if the URL is being correctly assigned
-      img.alt = `${item.name} cover`;  // Alt text for the image
+      // Loop through the data and display the book covers with name and author
+      data.forEach((item, index) => {
+        const bookSelector = document.createElement('div');
+        bookSelector.classList.add('book-selector');
+        
+        // Create an anchor tag for each book that links to /info?name=<book_name>
+        const bookLink = document.createElement('a');
+        const encodedBookName = encodeURIComponent(item.name);  // URL encode the book name
+        bookLink.href = `/info?name=${encodedBookName}`;  // Linking to the details page with the book name
 
-      // Book name
-      const bookName = document.createElement('div');
-      bookName.classList.add('book-name');
-      bookName.textContent = item.name;
+        // Set the book cover image using the img_url from the database
+        const img = document.createElement('img');
+        img.src = item.img_url;
+        img.alt = `${item.name} cover`;
 
-      // Book author
-      const bookAuthor = document.createElement('div');
-      bookAuthor.classList.add('book-author');
-      bookAuthor.textContent = item.author;
+        // Book name
+        const bookName = document.createElement('div');
+        bookName.classList.add('book-name');
+        bookName.textContent = item.name;
 
-      // Append all elements
-      bookSelector.appendChild(img);
-      bookSelector.appendChild(bookName);
-      bookSelector.appendChild(bookAuthor);
+        // Book author
+        const bookAuthor = document.createElement('div');
+        bookAuthor.classList.add('book-author');
+        bookAuthor.textContent = item.author;
 
-      booksContainer.appendChild(bookSelector);
+        // Append all elements to the book link
+        bookLink.appendChild(img);
+        bookLink.appendChild(bookName);
+        bookLink.appendChild(bookAuthor);
 
-      // Add click event listener to the book cover
-      bookSelector.addEventListener("click", function() {
-        alert("You clicked on Book " + (index + 1) + ": " + item.name + " by " + item.author);
+        // Append the book link to the book selector container
+        bookSelector.appendChild(bookLink);
+        booksContainer.appendChild(bookSelector);
       });
+    })
+    .catch(error => {
+      console.error('Error fetching data:', error);
     });
-  })
-  .catch(error => {
-    console.error('Error fetching data:', error);
-  });
   </script>
-  
 </body>
 </html>
