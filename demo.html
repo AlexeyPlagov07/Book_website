@@ -4,26 +4,70 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Books List</title>
-  <link rel="stylesheet" href="/styles.css"> <!-- Assuming you have a styles.css file -->
-</head>
-<body>
-  <!-- Navbar (optional, add if needed) -->
-  <div class="navbar">
-    <ul>
-      <li><a href="/">Home</a></li>
-      <li><a href="#">Books</a></li>
-    </ul>
-  </div>
+  <link rel="stylesheet" href="/styles.css">
 
-  <div class="content">
-    <h1>Books List</h1>
-    <!-- Book Covers Grid -->
-    <div class="book-covers-container" id="books-container">
-      <!-- Books will be dynamically inserted here -->
-    </div>
-  </div>
+  <!-- Firebase SDK (Modular approach) -->
+  <script type="module">
+    // Import necessary Firebase modules for app and authentication
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js';
+    import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js';
 
-  <script>
+    // Your Firebase config
+    const firebaseConfig = {
+        apiKey: "AIzaSyAmFE0VNFjYyWORFz-WVKehLI-ZXSzblMY",
+        authDomain: "book-library-d98aa.firebaseapp.com",
+        projectId: "book-library-d98aa",
+        storageBucket: "book-library-d98aa.firebasestorage.app",
+        messagingSenderId: "384262842467",
+        appId: "1:384262842467:web:53726b8422e6957484b056",
+        measurementId: "G-0LP7D3YB6V"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app); // Initialize Firebase Auth
+    const provider = new GoogleAuthProvider(); // Google Auth provider
+
+    // Function to handle login
+    const loginButton = document.getElementById('login-btn');
+    const logoutButton = document.getElementById('logout-btn');
+
+    loginButton.addEventListener('click', () => {
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          console.log('User signed in:', result.user);
+          loginButton.style.display = 'none';
+          logoutButton.style.display = 'block';
+        })
+        .catch((error) => {
+          console.error('Login failed:', error.message);
+        });
+    });
+
+    // Function to handle logout
+    logoutButton.addEventListener('click', () => {
+      signOut(auth)
+        .then(() => {
+          console.log('User signed out');
+          loginButton.style.display = 'block';
+          logoutButton.style.display = 'none';
+        })
+        .catch((error) => {
+          console.error('Logout failed:', error.message);
+        });
+    });
+
+    // Listen for changes in auth state
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        loginButton.style.display = 'none';
+        logoutButton.style.display = 'block';
+      } else {
+        loginButton.style.display = 'block';
+        logoutButton.style.display = 'none';
+      }
+    });
+
     // Fetch the data from the /data endpoint
     fetch('/data')
     .then(response => response.json())
@@ -39,7 +83,7 @@
       }
 
       // Loop through the data and display the book covers with name and author
-      data.forEach((item, index) => {
+      data.forEach((item) => {
         const bookSelector = document.createElement('div');
         bookSelector.classList.add('book-selector');
         
@@ -77,5 +121,27 @@
       console.error('Error fetching data:', error);
     });
   </script>
+</head>
+<body>
+  <!-- Navbar -->
+  <div class="navbar">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="#">Books</a></li>
+    </ul>
+    <!-- Authentication Buttons -->
+    <div id="auth-container">
+      <button id="login-btn">Login</button>
+      <button id="logout-btn" style="display: none;">Logout</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <h1>Books List</h1>
+
+    <div class="book-covers-container" id="books-container">
+      <!-- Books will be dynamically inserted here -->
+    </div>
+  </div>
 </body>
 </html>
